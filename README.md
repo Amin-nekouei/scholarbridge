@@ -2,7 +2,7 @@
 
 # ScholarBridge · پژوهش‌یار
 
-**A bilingual marketplace that connects people who need research done with vetted researchers.**
+**A bilingual marketplace for health research: search strategies, systematic reviews, epidemiology and biostatistics, delivered by vetted researchers.**
 
 Persian-first (RTL) with full English (LTR) support · Built with Django
 
@@ -27,7 +27,13 @@ The demo runs on a free hosting tier, so **the first load can take 30–60 secon
 
 ## What it does
 
-Clients post a research request with a description, deadline and budget. Researchers whose profiles an admin has approved send proposals with a price and timeline. The client picks one, and from then on the whole job lives inside the project: messages, files, delivery, revision requests and the final rating.
+ScholarBridge serves students and researchers in medicine, dentistry, nursing and the allied health sciences. Typical requests are:
+
+- **Search strategy design:** systematic search strings on MeSH and Emtree, adapted for PubMed, Embase, Scopus, Web of Science, CINAHL and Cochrane.
+- **Systematic reviews and meta-analysis:** screening, data extraction, risk-of-bias assessment and synthesis, reported to PRISMA and GRADE.
+- **Epidemiology and biostatistics:** study design, sample size, clinical trial analysis, regression and survival analysis in R, Stata or SPSS.
+
+Clients post a request with a description, deadline and budget. Researchers whose profiles an admin has approved send proposals with a price and timeline. The client picks one, and from then on the whole job lives inside the project: messages, files, delivery, revision requests and the final rating.
 
 - **Three roles:** client, researcher and admin. Each sees only what it should, and every permission is checked on the server.
 - **Researcher vetting:** a researcher's credentials are reviewed by an admin before they can send a first proposal.
@@ -64,11 +70,11 @@ stateDiagram-v2
 
 ## Screenshots
 
-**Project workspace.** Proposals, conversation, files, available actions and status history on one page:
+**Project workspace.** A meta-analysis in progress, with proposals, conversation, files, available actions and status history on one page:
 
 <img src="screenshots/project-workspace-en.png" alt="Project workspace (English)" width="100%">
 
-**A completed project.** The full audit trail, including a revision round, the delivered files and the client's rating:
+**A completed project.** A scoping-review search strategy with the full audit trail, including a revision round, the delivered files and the client's rating:
 
 <img src="screenshots/project-history-en.png" alt="Completed project with status history" width="100%">
 
