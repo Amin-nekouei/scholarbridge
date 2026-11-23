@@ -23,7 +23,7 @@ Persian-first (RTL) with full English (LTR) support · Built with Django
 | Client (posts projects) | `client1` | `demo1234` |
 | Researcher (sends proposals) | `researcher1` | `demo1234` |
 
-The demo runs on a free hosting tier, so **the first load can take 30–60 seconds** while the server wakes up. Use the **English / فارسی** button in the top bar to switch languages. Demo data may be reset at any time.
+The demo runs on a free hosting tier, so **the first load can take 30–60 seconds** while the server wakes up. The site opens in Persian; use the **English** button in the top bar to switch the interface. Demo projects on the live site are written in Persian, and the data may be reset at any time.
 
 ## What it does
 
@@ -68,22 +68,26 @@ stateDiagram-v2
 
 <img src="screenshots/project-workspace-en.png" alt="Project workspace (English)" width="100%">
 
-**The same app in Persian (RTL).** A completed project with its full status history and the client's rating:
+**A completed project.** The full audit trail, including a revision round, the delivered files and the client's rating:
 
-<img src="screenshots/project-history-fa.png" alt="Completed project in Persian" width="100%">
+<img src="screenshots/project-history-en.png" alt="Completed project with status history" width="100%">
 
-**Researcher dashboard:**
+**Dashboards for each role.** The client's projects at a glance, and the researcher's active work and proposals:
 
+<img src="screenshots/client-dashboard-en.png" alt="Client dashboard" width="100%">
 <img src="screenshots/researcher-dashboard-en.png" alt="Researcher dashboard" width="100%">
 
-**Responsive design.** Persian and English on mobile:
+**In-app notifications** for every step of the workflow:
 
-<img src="screenshots/mobile.png" alt="Mobile views in Persian and English" width="100%">
+<img src="screenshots/notifications-en.png" alt="Notifications" width="100%">
+
+**Responsive design.** The landing page and a project workspace on mobile:
+
+<img src="screenshots/mobile.png" alt="Mobile views" width="100%">
 
 <details>
-<summary><b>Persian landing page and the full English landing page</b></summary>
+<summary><b>Full landing page</b></summary>
 
-<img src="screenshots/hero-fa.png" alt="Persian landing page" width="100%">
 <img src="screenshots/landing-full-en.png" alt="Full landing page" width="100%">
 
 </details>
