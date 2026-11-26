@@ -7,7 +7,7 @@
 Persian-first (RTL) with full English (LTR) support · Built with Django
 
 [![CI/CD](https://img.shields.io/endpoint?cacheSeconds=300&url=https://gist.githubusercontent.com/Amin-nekouei/2b43e83c82daa4ab4efb6237c051a41d/raw/ci.json)](#testing--cicd) [![Unit tests](https://img.shields.io/endpoint?cacheSeconds=300&url=https://gist.githubusercontent.com/Amin-nekouei/2b43e83c82daa4ab4efb6237c051a41d/raw/tests.json)](#testing--cicd) [![E2E tests](https://img.shields.io/endpoint?cacheSeconds=300&url=https://gist.githubusercontent.com/Amin-nekouei/2b43e83c82daa4ab4efb6237c051a41d/raw/e2e.json)](#testing--cicd)
-<sub><i>Live CI status: updated automatically on every push to the private source repository.</i></sub>
+<sub><br><i>Live CI status: updated automatically on every push to the private source repository.</i></sub>
 
 [**▶ Live demo**](https://researchdesk-beta.onrender.com/en/) · [LinkedIn](https://www.linkedin.com/in/amin-nekouei) · [GitHub](https://github.com/Amin-nekouei)
 
