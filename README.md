@@ -6,6 +6,8 @@
 
 Persian-first (RTL) with full English (LTR) support · Built with Django
 
+[![CI/CD](https://img.shields.io/endpoint?cacheSeconds=300&url=https://gist.githubusercontent.com/Amin-nekouei/2b43e83c82daa4ab4efb6237c051a41d/raw/ci.json)](#testing--cicd) [![Unit tests](https://img.shields.io/endpoint?cacheSeconds=300&url=https://gist.githubusercontent.com/Amin-nekouei/2b43e83c82daa4ab4efb6237c051a41d/raw/tests.json)](#testing--cicd) [![E2E tests](https://img.shields.io/endpoint?cacheSeconds=300&url=https://gist.githubusercontent.com/Amin-nekouei/2b43e83c82daa4ab4efb6237c051a41d/raw/e2e.json)](#testing--cicd)
+
 [**▶ Live demo**](https://researchdesk-beta.onrender.com/en/) · [LinkedIn](https://www.linkedin.com/in/amin-nekouei) · [GitHub](https://github.com/Amin-nekouei)
 
 <img src="screenshots/hero-en.png" alt="ScholarBridge landing page" width="100%">
@@ -98,6 +100,41 @@ stateDiagram-v2
 
 </details>
 
+## Testing & CI/CD
+
+The badges above are live. They are written by the pipeline of the private source repository after every run, so they show the real state of the code.
+
+**End-to-end tests (Playwright).** A real Chromium browser drives a live server seeded with demo data. Here the client (left) and the researcher (right) take a project from request to rated delivery, in two separate sessions:
+
+<img src="screenshots/e2e-lifecycle.gif" alt="End-to-end test: full project lifecycle, client and researcher side by side" width="100%">
+
+| Journey | What it proves |
+|---|---|
+| Full project lifecycle | Request with attachment → proposal → selection → chat → delivery → approval → rating; status history and notifications are checked in the database |
+| Researcher vetting | A new researcher cannot send proposals until an admin approves them in the admin site |
+| Private stays private | Anonymous users are sent to login; a researcher outside the project sees no files or chat and gets 404 on a direct download link |
+| Language switch | Persian ⇄ English keeps the current page, and the choice is remembered |
+| Mobile navigation | The collapsed menu works on a phone-sized screen |
+| Health check | `/healthz/` reports the app and database status |
+
+**Unit and integration tests (Django).** Role-based access to every page, every state-machine transition, file-download permissions, notifications in the reader's language, and the demo-data command.
+
+**Pipeline (GitHub Actions), on every push:**
+
+```mermaid
+flowchart LR
+    P([git push]) --> T[Checks & unit tests<br/>PostgreSQL · DEBUG off]
+    P --> E[E2E tests<br/>Playwright · Chromium]
+    T & E --> D{release<br/>branch?}
+    D -- yes --> R[Deploy to Render]
+    R --> H[Wait for /healthz/<br/>to report the new commit]
+    H --> S[Smoke-test the<br/>live site]
+```
+
+- **Production-like CI:** tests run against PostgreSQL with `DEBUG` off and hashed static files, plus `check --deploy`, a missing-migration check and translation-catalogue validation.
+- **Verified deploys:** a release is only reported as done once the live `/healthz/` endpoint returns the exact commit that was tested, and the main pages respond correctly.
+- **Debuggable failures:** a failing E2E test uploads its Playwright trace and screenshot as a build artifact.
+
 ## Architecture
 
 ```mermaid
@@ -129,14 +166,15 @@ The project is split into modular Django apps:
 - **Persian-first i18n.** The source strings are Persian, and English is a gettext catalog of about 370 strings. The default language is set deliberately rather than taken from the browser, and user-written content keeps its own direction (`unicode-bidi: plaintext`) inside the opposite-direction UI.
 - **No CDN dependencies.** Bootstrap (RTL and LTR), the icon font and the Vazirmatn typeface are all served by the app itself, so it loads reliably on networks where public CDNs are slow or blocked.
 - **Production setup.** It runs on gunicorn with WhiteNoise (compressed, hashed static files) and PostgreSQL through `DATABASE_URL`. It refuses to start without a secret key, uses secure cookies behind the proxy, and is deployed from a Render Blueprint (infrastructure as code). The admin password comes from the environment, never from the repository.
-- **Tested.** Automated tests cover role-based access to every page, the full project lifecycle, file-download permissions, a demo-data smoke test and the language behaviour (default language, switching, notifications in the reader's language).
+- **Tested and continuously deployed.** Django unit tests and Playwright end-to-end tests run in GitHub Actions on every push; releases are deployed to Render and verified against the live site (see [Testing & CI/CD](#testing--cicd)).
 
 ## Tech stack
 
 **Backend:** Python, Django, PostgreSQL (SQLite in development), gunicorn, WhiteNoise
 **Frontend:** Django templates, Bootstrap 5 (RTL + LTR), Bootstrap Icons, Vazirmatn, vanilla JS
 **i18n:** Django i18n / GNU gettext, Persian + English
-**Deployment:** Render (Blueprint, managed PostgreSQL)
+**Testing:** Django test framework, pytest, Playwright
+**CI/CD & deployment:** GitHub Actions, Render (Blueprint, managed PostgreSQL)
 
 ## Status
 
