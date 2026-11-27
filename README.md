@@ -19,12 +19,7 @@ Persian-first (RTL) with full English (LTR) support · Built with Django
 
 ---
 
-## Try it
 
-| Role | Username | Password |
-|---|---|---|
-| Client (posts projects) | `client1` | `demo1234` |
-| Researcher (sends proposals) | `researcher1` | `demo1234` |
 
 The demo runs on a free hosting tier, so **the first load can take 30–60 seconds** while the server wakes up. The English interface lives under [`/en/`](https://researchdesk-beta.onrender.com/en/) and the Persian one at the [root](https://researchdesk-beta.onrender.com/); the button in the top bar switches between them. Demo projects on the live site are written in Persian, and the data may be reset at any time.
 
