@@ -1,8 +1,8 @@
 <div align="center">
 
-# ScholarBridge · پژوهش‌یار
+# ScholarBridge
 
-**A bilingual marketplace for health research: search strategies, systematic reviews, epidemiology and biostatistics, delivered by vetted researchers.**
+**A bilingual marketplace for health research: search strategies, systematic reviews, epidemiology and biostatistics, delivered by vetted researchers, with an AI assistant that turns a plain-language need into a structured research brief.**
 
 Persian-first (RTL) with full English (LTR) support · Built with Django
 
@@ -45,7 +45,29 @@ Clients post a request with a description, deadline and budget. Researchers whos
 - **Full audit trail:** every status change is logged with its time and the user who made it.
 - **Ratings and track record:** after approving a delivery, the client rates the researcher, and the rating stays on the researcher's profile.
 - **In-app notifications:** for proposals, selection, delivery, revisions, disputes and admin actions.
+- **AI request assistant:** turns a client's plain-language need into a structured research brief and suggests researchers who fit it ([details below](#ai-request-assistant)).
 - **Bilingual, both ways:** Persian is the default and English is a full translation. Layout, Bootstrap build and arrows flip between RTL and LTR.
+
+## AI request assistant
+
+Most clients know their topic but not the vocabulary of research design. The assistant closes that gap in three steps:
+
+1. **Describe the need** in plain words, in English or Persian.
+2. **Answer two or three follow-up questions** the assistant asks to fill the gaps (population, purpose, data, deadline).
+3. **Review the brief:** a research question, the PICO framework (population, intervention, comparison, outcome), study type, deliverables, data sources, ethical considerations, a realistic timeline and a suggested budget, plus the assumptions the client should confirm.
+
+One click pre-fills the project form from the brief. The client can edit every field, and nothing is published until they submit it. The brief is saved with the project, and the project page then lists the approved researchers whose expertise best matches it.
+
+<img src="screenshots/ai-brief-assistant.gif" alt="AI request assistant, step 1: describing the research need" width="100%">
+
+**How it is built:**
+
+- **Provider-agnostic.** Gemini or Claude is chosen by an environment variable, with no code changes. Without an API key, a rule-based demo mode produces the same brief shape, so the feature always works.
+- **Structured output, validated.** The model must answer in a JSON schema. The server then validates and normalizes the result: timelines and budgets are clamped to sensible ranges and every field is length-limited.
+- **Fails gracefully.** If the AI service times out, is over quota or returns invalid output, that step falls back to demo mode and the user sees a short notice instead of an error.
+- **Grounded budgets.** The suggested budget is informed by the budgets of real projects on the platform.
+- **Guarded and audited.** Each user has a daily AI limit, every call is logged in the admin site, client text is treated as data rather than instructions, and the form warns against entering patient-identifying information.
+- **Tested without network calls.** Unit tests cover the schema, providers (mocked), fallback, limits and matching, and the end-to-end suite runs the whole flow in demo mode.
 
 ## Project lifecycle
 
@@ -116,9 +138,10 @@ The badges above are live. They are written by the pipeline of the private sourc
 | Private stays private | Anonymous users are sent to login; a researcher outside the project sees no files or chat and gets 404 on a direct download link |
 | Language switch | Persian ⇄ English keeps the current page, and the choice is remembered |
 | Mobile navigation | The collapsed menu works on a phone-sized screen |
+| AI request assistant | Describe → follow-up questions → brief → pre-filled form → project page with the saved brief and matched researchers |
 | Health check | `/healthz/` reports the app and database status |
 
-**Unit and integration tests (Django).** Role-based access to every page, every state-machine transition, file-download permissions, notifications in the reader's language, and the demo-data command.
+**Unit and integration tests (Django).** Role-based access to every page, every state-machine transition, file-download permissions, notifications in the reader's language, the AI assistant (schema validation, provider fallback, daily limit, researcher matching) and the demo-data command.
 
 **Pipeline (GitHub Actions), on every push:**
 
@@ -155,7 +178,7 @@ The project is split into modular Django apps:
 | App | Responsibility |
 |---|---|
 | `accounts` | Custom user model with roles, researcher profiles and admin approval |
-| `projects` | Projects, proposals, files, status log, reviews, the state machine and permission rules |
+| `projects` | Projects, proposals, files, status log, reviews, the state machine, permission rules and the AI request assistant |
 | `messaging` | The per-project conversation, with attachments |
 | `notifications` | In-app notifications, stored as translation keys plus parameters |
 | `core` | Landing page, role-based dashboards, access decorators, upload validation, demo-data command |
@@ -173,6 +196,7 @@ The project is split into modular Django apps:
 
 **Backend:** Python, Django, PostgreSQL (SQLite in development), gunicorn, WhiteNoise
 **Frontend:** Django templates, Bootstrap 5 (RTL + LTR), Bootstrap Icons, Vazirmatn, vanilla JS
+**AI:** Google Gemini and Anthropic Claude (official SDKs, JSON-schema structured output), rule-based demo fallback
 **i18n:** Django i18n / GNU gettext, Persian + English
 **Testing:** Django test framework, pytest, Playwright
 **CI/CD & deployment:** GitHub Actions, Render (Blueprint, managed PostgreSQL)
